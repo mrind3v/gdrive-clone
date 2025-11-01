@@ -240,48 +240,83 @@ const Drive = ({ currentUser, onLogout }) => {
     }
   };
 
-  const handleShare = (itemId, email, permission) => {
-    const user = mockUsers.find(u => u.email === email);
-    if (user) {
-      const newShare = {
-        id: uuidv4(),
-        fileId: itemId,
-        userId: user.id,
-        permission,
-        sharedBy: currentUser.id,
-        sharedAt: new Date().toISOString(),
-      };
-      setShares([...shares, newShare]);
+  const handleShare = async (itemId, email, permission) => {
+    try {
+      await sharesApi.create({ itemId, email, permission });
+      toast({
+        title: 'Shared successfully',
+        description: `Shared with ${email}`,
+      });
+      // Refresh shares for this item
+      if (selectedItem && selectedItem.id === itemId) {
+        const response = await sharesApi.getShares(itemId);
+        // Update local state if needed
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      toast({
+        title: 'Share failed',
+        description: error.response?.data?.detail || 'Failed to share item',
+        variant: 'destructive',
+      });
     }
   };
 
-  const handleRevokeAccess = (itemId, userId) => {
-    setShares(shares.filter(s => !(s.fileId === itemId && s.userId === userId)));
-  };
-
-  const handleAddComment = (fileId, text) => {
-    const newComment = {
-      id: uuidv4(),
-      fileId,
-      userId: currentUser.id,
-      userName: currentUser.name,
-      text,
-      timestamp: new Date().toISOString(),
-    };
-    setComments([...comments, newComment]);
-  };
-
-  const getSharedUsers = (itemId) => {
-    return shares
-      .filter(s => s.fileId === itemId)
-      .map(s => {
-        const user = mockUsers.find(u => u.id === s.userId);
-        return { ...user, permission: s.permission };
+  const handleRevokeAccess = async (itemId, shareId) => {
+    try {
+      await sharesApi.delete(shareId);
+      toast({
+        title: 'Access revoked',
+        description: 'User access has been removed',
       });
+    } catch (error) {
+      console.error('Error revoking access:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to revoke access',
+        variant: 'destructive',
+      });
+    }
   };
 
-  const getFileComments = (fileId) => {
-    return comments.filter(c => c.fileId === fileId);
+  const handleAddComment = async (fileId, text) => {
+    try {
+      await commentsApi.create({ fileId, text });
+      toast({
+        title: 'Comment added',
+        description: 'Your comment has been posted',
+      });
+      // Refresh comments
+      const response = await commentsApi.getComments(fileId);
+      setComments(response.data);
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to add comment',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const getSharedUsers = async (itemId) => {
+    try {
+      const response = await sharesApi.getShares(itemId);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching shared users:', error);
+      return [];
+    }
+  };
+
+  const getFileComments = async (fileId) => {
+    try {
+      const response = await commentsApi.getComments(fileId);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      return [];
+    }
   };
 
   const commonProps = {
