@@ -11,7 +11,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { Textarea } from './ui/textarea';
 import { Download, Share2, Star, Trash2, X, ZoomIn, ZoomOut, FileText } from 'lucide-react';
-import { formatFileSize, formatDate } from '../mock/mockData';
+import { formatFileSize, formatDate } from '../utils/helpers';
 import { useToast } from '../hooks/use-toast';
 
 const FilePreviewModal = ({ isOpen, onClose, file, onAddComment, onAction, getComments }) => {
