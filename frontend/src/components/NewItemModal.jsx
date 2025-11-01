@@ -66,9 +66,10 @@ const NewItemModal = ({ isOpen, onClose, onCreateFolder, onUploadFile }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" aria-describedby="new-item-description">
         <DialogHeader>
           <DialogTitle>Create new</DialogTitle>
+          <p id="new-item-description" className="sr-only">Create a new folder or upload files</p>
         </DialogHeader>
         <Tabs defaultValue="upload" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
