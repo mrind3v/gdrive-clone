@@ -48,6 +48,16 @@ function App() {
             }
           />
           <Route
+            path="/signup"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Signup onLogin={handleLogin} />
+              )
+            }
+          />
+          <Route
             path="/*"
             element={
               isAuthenticated ? (
