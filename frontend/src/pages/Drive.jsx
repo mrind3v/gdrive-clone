@@ -11,7 +11,7 @@ import NewItemModal from '../components/NewItemModal';
 import ShareModal from '../components/ShareModal';
 import FilePreviewModal from '../components/FilePreviewModal';
 import { useToast } from '../hooks/use-toast';
-import { drive, folders, files, items, shares as sharesApi, comments as commentsApi, storage as storageApi } from '../api/client';
+import * as api from '../api/client';
 
 const Drive = ({ currentUser, onLogout }) => {
   const [files, setFiles] = useState([]);
