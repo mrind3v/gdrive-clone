@@ -521,11 +521,11 @@ This project is built as an AI agent training environment and educational purpos
 
 **Screenshots**
 
-![Login Page](./images/login.png)
-![Main Drive View](./images/main-drive.png)
-![File Upload](./images/upload.png)
-![File Preview](./images/preview.png)
-![Sharing](./images/share.png)
+![Login Page](./images/login-page.jpeg)
+![Main Drive View](./images/my-drive-view.jpeg)
+![File Upload](./images/upload-and-create.png)
+<!-- ![File Preview](./images/preview.png)
+![Sharing](./images/share.png) --> -->
 
 ---
 
