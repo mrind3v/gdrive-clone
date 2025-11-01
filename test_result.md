@@ -214,17 +214,89 @@ backend:
           comment: "Storage endpoint working with usage tracking and breakdown by file type. GET /api/storage ✅"
 
 frontend:
-  - task: "Frontend Integration"
+  - task: "Authentication Flow"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Login.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "Starting comprehensive frontend testing - Authentication flow (signup, login, logout)"
+
+  - task: "Folder Management"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/NewItemModal.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "Testing folder creation, navigation, rename, star, trash operations"
+
+  - task: "File Upload and Operations"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Drive.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "Testing file upload, download, rename, star, trash, restore operations"
+
+  - task: "Views and Navigation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/Drive.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "Testing My Drive, Recent, Starred, Shared, Trash views and search functionality"
+
+  - task: "File Preview and Comments"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/FilePreviewModal.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "Testing file preview modal, zoom controls, comments system"
+
+  - task: "Sharing System"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/ShareModal.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "Testing share functionality, permissions, access revocation"
+
+  - task: "UI/UX and Responsiveness"
     implemented: true
     working: "NA"
     file: "/app/frontend/src/App.js"
     stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
+    priority: "low"
+    needs_retesting: true
     status_history:
         - working: "NA"
           agent: "testing"
-          comment: "Frontend testing not performed as per testing agent limitations"
+          comment: "Testing UI interactions, loading states, toast notifications, responsive behavior"
 
 metadata:
   created_by: "testing_agent"
