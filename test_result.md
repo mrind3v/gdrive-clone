@@ -320,3 +320,5 @@ test_plan:
 agent_communication:
     - agent: "testing"
       message: "Comprehensive backend testing completed successfully. All 22 API endpoints tested and working correctly. Files are properly organized in folders, authentication is secure, and all CRUD operations function as expected. The system handles file uploads, sharing, comments, and storage tracking properly."
+    - agent: "testing"
+      message: "Starting comprehensive frontend testing. Application URL: http://localhost:3000. Backend API: http://localhost:8001/api. Will test all features systematically: authentication, folder management, file operations, views, sharing, comments, and UI/UX."
