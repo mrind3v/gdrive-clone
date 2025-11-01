@@ -21,19 +21,36 @@ import {
   SelectValue,
 } from './ui/select';
 
-const ShareModal = ({ isOpen, onClose, item, sharedUsers = [], onShare, onRevokeAccess }) => {
+const ShareModal = ({ isOpen, onClose, item, onShare, onRevokeAccess, getSharedUsers }) => {
   const [email, setEmail] = useState('');
   const [permission, setPermission] = useState('viewer');
+  const [sharedUsers, setSharedUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleShare = () => {
+  useEffect(() => {
+    if (isOpen && item) {
+      loadSharedUsers();
+    }
+  }, [isOpen, item]);
+
+  const loadSharedUsers = async () => {
+    setLoading(true);
+    try {
+      const users = await getSharedUsers(item.id);
+      setSharedUsers(users);
+    } catch (error) {
+      console.error('Error loading shared users:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleShare = async () => {
     if (email.trim()) {
-      onShare(item.id, email, permission);
+      await onShare(item.id, email, permission);
       setEmail('');
-      toast({
-        title: 'Shared successfully',
-        description: `${item.name} has been shared with ${email}`,
-      });
+      await loadSharedUsers();
     }
   };
 
@@ -46,12 +63,10 @@ const ShareModal = ({ isOpen, onClose, item, sharedUsers = [], onShare, onRevoke
     });
   };
 
-  const handleRevoke = (userId) => {
-    onRevokeAccess(item.id, userId);
-    toast({
-      title: 'Access revoked',
-      description: 'User access has been removed',
-    });
+  const handleRevoke = async (userId) => {
+    // Need to find the share ID - for now using userId as shareId
+    await onRevokeAccess(item.id, userId);
+    await loadSharedUsers();
   };
 
   return (
