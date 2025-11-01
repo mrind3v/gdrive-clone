@@ -524,8 +524,8 @@ This project is built as an AI agent training environment and educational purpos
 ![Login Page](./images/login-page.jpeg)
 ![Main Drive View](./images/my-drive-view.jpeg)
 ![File Upload](./images/upload-and-create.png)
-<!-- ![File Preview](./images/preview.png)
-![Sharing](./images/share.png) --> -->
+![File Preview](./images/file-preview.png)
+![Sharing](./images/share-modal.png)
 
 ---
 
