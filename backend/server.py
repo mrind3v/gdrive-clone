@@ -294,7 +294,10 @@ async def get_drive_items(
         folders_cursor = db.folders.find(folder_query)
         files_cursor = db.files.find(file_query)
     
-    folders = await (folders_cursor if view != "recent" else db.folders.find({"_id": {"$in": []}}).to_list(0))
+    if view == "recent":
+        folders = []
+    else:
+        folders = await folders_cursor.to_list(1000)
     files = await files_cursor.to_list(1000)
     
     # Format responses
