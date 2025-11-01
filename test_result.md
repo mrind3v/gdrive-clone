@@ -305,7 +305,14 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Authentication Flow"
+    - "Folder Management"
+    - "File Upload and Operations"
+    - "Views and Navigation"
+    - "File Preview and Comments"
+    - "Sharing System"
+    - "UI/UX and Responsiveness"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
