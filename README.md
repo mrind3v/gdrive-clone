@@ -520,12 +520,18 @@ This project is built as an AI agent training environment and educational purpos
 ---
 
 **Screenshots**
-
+Login Page
 ![Login Page](./images/login-page.jpeg)
+My Drive tab
 ![Main Drive View](./images/my-drive-view.jpeg)
+Trash tab
+![Trash view](./images/trash.png)
+File upload and creatiion window
 ![File Upload](./images/upload-and-create.png)
-![File Preview](./images/file-preview.png)
+File sharing window
 ![Sharing](./images/share-modal.png)
+File Preview window
+![File Preview](./images/file-preview.png)
 
 ---
 
