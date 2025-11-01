@@ -344,8 +344,8 @@ const Drive = ({ currentUser, onLogout }) => {
           currentView={currentView}
           onViewChange={handleViewChange}
           onNewClick={() => setShowNewModal(true)}
-          storageUsed={mockStorageInfo.used}
-          storageTotal={mockStorageInfo.total}
+          storageUsed={storageInfo.used}
+          storageTotal={storageInfo.total}
         />
         <main className="flex-1 overflow-auto">
           <Routes>
