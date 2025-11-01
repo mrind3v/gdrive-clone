@@ -145,7 +145,7 @@ const Drive = ({ currentUser, onLogout }) => {
     try {
       switch (action) {
         case 'star':
-          await items.update(item.id, { starred: !item.starred });
+          await api.items.update(item.id, { starred: !item.starred });
           toast({
             title: item.starred ? 'Removed from starred' : 'Added to starred',
             description: `${item.name} ${item.starred ? 'unstarred' : 'starred'}`,
@@ -155,14 +155,14 @@ const Drive = ({ currentUser, onLogout }) => {
         case 'trash':
           if (item.trashed) {
             // Permanent delete
-            await items.delete(item.id, true);
+            await api.items.delete(item.id, true);
             toast({
               title: 'Deleted permanently',
               description: `${item.name} has been deleted forever`,
             });
           } else {
             // Move to trash
-            await items.delete(item.id, false);
+            await api.items.delete(item.id, false);
             toast({
               title: 'Moved to trash',
               description: `${item.name} moved to trash`,
@@ -172,7 +172,7 @@ const Drive = ({ currentUser, onLogout }) => {
           fetchStorage();
           break;
         case 'restore':
-          await items.restore(item.id);
+          await api.items.restore(item.id);
           toast({
             title: 'Restored',
             description: `${item.name} has been restored`,
@@ -185,7 +185,7 @@ const Drive = ({ currentUser, onLogout }) => {
           break;
         case 'download':
           try {
-            const response = await files.download(item.id);
+            const response = await api.files.download(item.id);
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -208,7 +208,7 @@ const Drive = ({ currentUser, onLogout }) => {
         case 'rename':
           const newName = prompt('Enter new name:', item.name);
           if (newName && newName.trim()) {
-            await items.update(item.id, { name: newName });
+            await api.items.update(item.id, { name: newName });
             toast({
               title: 'Renamed',
               description: `Renamed to ${newName}`,
