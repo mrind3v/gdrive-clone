@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileText, Folder, MoreVertical, Star, Trash2, Share2, Download, Edit } from 'lucide-react';
-import { formatFileSize, formatDate } from '../mock/mockData';
+import { formatFileSize, formatDate } from '../utils/helpers';
 import {
   DropdownMenu,
   DropdownMenuContent,
