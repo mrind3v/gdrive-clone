@@ -4,7 +4,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { useToast } from '../hooks/use-toast';
-import { mockUsers } from '../mock/mockData';
+import { auth } from '../api/client';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -16,26 +16,24 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      const user = mockUsers.find(u => u.email === email && u.password === password);
+    try {
+      const response = await auth.login({ email, password });
+      const { user, token } = response.data;
       
-      if (user) {
-        const token = 'mock-jwt-token-' + user.id;
-        onLogin(user, token);
-        toast({
-          title: 'Welcome back!',
-          description: `Logged in as ${user.name}`,
-        });
-      } else {
-        toast({
-          title: 'Login failed',
-          description: 'Invalid email or password',
-          variant: 'destructive',
-        });
-      }
+      onLogin(user, token);
+      toast({
+        title: 'Welcome back!',
+        description: `Logged in as ${user.name}`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Login failed',
+        description: error.response?.data?.detail || 'Invalid email or password',
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   return (
