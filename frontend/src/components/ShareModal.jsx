@@ -71,9 +71,10 @@ const ShareModal = ({ isOpen, onClose, item, onShare, onRevokeAccess, getSharedU
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg" aria-describedby="share-description">
         <DialogHeader>
           <DialogTitle>Share "{item?.name}"</DialogTitle>
+          <p id="share-description" className="sr-only">Share this item with other users</p>
         </DialogHeader>
         <Tabs defaultValue="people" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
