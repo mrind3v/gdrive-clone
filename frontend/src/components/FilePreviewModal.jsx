@@ -47,6 +47,8 @@ const FilePreviewModal = ({ isOpen, onClose, file, onAddComment, onAction, getCo
     }
   };
 
+  if (!file) return null;
+
   const renderPreview = () => {
     if (file.type?.startsWith('image/')) {
       return (
