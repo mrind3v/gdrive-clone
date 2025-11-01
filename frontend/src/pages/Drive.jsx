@@ -242,14 +242,14 @@ const Drive = ({ currentUser, onLogout }) => {
 
   const handleShare = async (itemId, email, permission) => {
     try {
-      await sharesApi.create({ itemId, email, permission });
+      await api.shares.create({ itemId, email, permission });
       toast({
         title: 'Shared successfully',
         description: `Shared with ${email}`,
       });
       // Refresh shares for this item
       if (selectedItem && selectedItem.id === itemId) {
-        const response = await sharesApi.getShares(itemId);
+        const response = await api.shares.getShares(itemId);
         // Update local state if needed
       }
     } catch (error) {
@@ -264,7 +264,7 @@ const Drive = ({ currentUser, onLogout }) => {
 
   const handleRevokeAccess = async (itemId, shareId) => {
     try {
-      await sharesApi.delete(shareId);
+      await api.shares.delete(shareId);
       toast({
         title: 'Access revoked',
         description: 'User access has been removed',
@@ -281,13 +281,13 @@ const Drive = ({ currentUser, onLogout }) => {
 
   const handleAddComment = async (fileId, text) => {
     try {
-      await commentsApi.create({ fileId, text });
+      await api.comments.create({ fileId, text });
       toast({
         title: 'Comment added',
         description: 'Your comment has been posted',
       });
       // Refresh comments
-      const response = await commentsApi.getComments(fileId);
+      const response = await api.comments.getComments(fileId);
       setComments(response.data);
     } catch (error) {
       console.error('Error adding comment:', error);
@@ -301,7 +301,7 @@ const Drive = ({ currentUser, onLogout }) => {
 
   const getSharedUsers = async (itemId) => {
     try {
-      const response = await sharesApi.getShares(itemId);
+      const response = await api.shares.getShares(itemId);
       return response.data;
     } catch (error) {
       console.error('Error fetching shared users:', error);
@@ -311,7 +311,7 @@ const Drive = ({ currentUser, onLogout }) => {
 
   const getFileComments = async (fileId) => {
     try {
-      const response = await commentsApi.getComments(fileId);
+      const response = await api.comments.getComments(fileId);
       return response.data;
     } catch (error) {
       console.error('Error fetching comments:', error);
