@@ -80,13 +80,14 @@ const Login = ({ onLogin }) => {
               {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
-          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-            <p className="text-xs text-blue-900 font-medium mb-2">Demo accounts:</p>
-            <div className="space-y-1 text-xs text-blue-700">
-              <p>john@example.com / password123</p>
-              <p>jane@example.com / password123</p>
-              <p>bob@example.com / password123</p>
-            </div>
+          <div className="mt-4 text-center text-sm">
+            <span className="text-gray-600">Don't have an account? </span>
+            <button
+              onClick={() => window.location.href = '/signup'}
+              className="text-blue-600 hover:underline font-medium"
+            >
+              Sign up
+            </button>
           </div>
         </CardContent>
       </Card>
