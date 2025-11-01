@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Comprehensive backend testing for Google Drive clone application with systematic endpoint testing"
+user_problem_statement: "Comprehensive end-to-end frontend testing for Google Drive clone application with systematic UI and integration testing"
 
 backend:
   - task: "Authentication System"
