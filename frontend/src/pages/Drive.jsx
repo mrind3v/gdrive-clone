@@ -88,128 +88,144 @@ const Drive = ({ currentUser, onLogout }) => {
     setSearchQuery(query);
   };
 
-  const handleCreateFolder = (name) => {
-    const newFolder = {
-      id: uuidv4(),
-      name,
-      parentId: currentFolder,
-      ownerId: currentUser.id,
-      created: new Date().toISOString(),
-      modified: new Date().toISOString(),
-      starred: false,
-      trashed: false,
-    };
-    setFolders([...folders, newFolder]);
+  const handleCreateFolder = async (name) => {
+    try {
+      await folders.create({ name, parentId: currentFolder });
+      toast({
+        title: 'Folder created',
+        description: `"${name}" has been created successfully.`,
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Error creating folder:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create folder',
+        variant: 'destructive',
+      });
+    }
   };
 
-  const handleUploadFile = (fileList) => {
-    const newFiles = Array.from(fileList).map((file) => ({
-      id: uuidv4(),
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      folderId: currentFolder,
-      ownerId: currentUser.id,
-      created: new Date().toISOString(),
-      modified: new Date().toISOString(),
-      starred: false,
-      trashed: false,
-      thumbnail: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
-      lastOpened: null,
-    }));
+  const handleUploadFile = async (fileList) => {
+    for (const file of fileList) {
+      const fileId = Date.now() + Math.random();
+      setUploadingFiles(prev => [...prev, { id: fileId, name: file.name, progress: 0 }]);
 
-    // Simulate upload with progress
-    newFiles.forEach((file, index) => {
-      setUploadingFiles(prev => [...prev, { ...file, progress: 0 }]);
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 10;
-        if (progress >= 100) {
-          clearInterval(interval);
-          setUploadingFiles(prev => prev.filter(f => f.id !== file.id));
-          setFiles(prev => [...prev, file]);
-        } else {
-          setUploadingFiles(prev => prev.map(f => f.id === file.id ? { ...f, progress } : f));
-        }
-      }, 200);
-    });
+      try {
+        // Simulate progress
+        const progressInterval = setInterval(() => {
+          setUploadingFiles(prev => 
+            prev.map(f => f.id === fileId && f.progress < 90 ? { ...f, progress: f.progress + 10 } : f)
+          );
+        }, 200);
+
+        await files.upload(file, currentFolder);
+        
+        clearInterval(progressInterval);
+        setUploadingFiles(prev => prev.map(f => f.id === fileId ? { ...f, progress: 100 } : f));
+        
+        setTimeout(() => {
+          setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+          fetchData();
+          fetchStorage();
+        }, 500);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+        toast({
+          title: 'Upload failed',
+          description: `Failed to upload ${file.name}`,
+          variant: 'destructive',
+        });
+      }
+    }
   };
 
-  const handleItemAction = (action, item) => {
-    switch (action) {
-      case 'star':
-        if (item.type) {
-          setFiles(files.map(f => f.id === item.id ? { ...f, starred: !f.starred } : f));
-        } else {
-          setFolders(folders.map(f => f.id === item.id ? { ...f, starred: !f.starred } : f));
-        }
-        toast({
-          title: item.starred ? 'Removed from starred' : 'Added to starred',
-          description: `${item.name} ${item.starred ? 'unstarred' : 'starred'}`,
-        });
-        break;
-      case 'trash':
-        if (item.trashed) {
-          // Permanent delete
-          if (item.type) {
-            setFiles(files.filter(f => f.id !== item.id));
-          } else {
-            setFolders(folders.filter(f => f.id !== item.id));
-          }
+  const handleItemAction = async (action, item) => {
+    try {
+      switch (action) {
+        case 'star':
+          await items.update(item.id, { starred: !item.starred });
           toast({
-            title: 'Deleted permanently',
-            description: `${item.name} has been deleted forever`,
+            title: item.starred ? 'Removed from starred' : 'Added to starred',
+            description: `${item.name} ${item.starred ? 'unstarred' : 'starred'}`,
           });
-        } else {
-          // Move to trash
-          if (item.type) {
-            setFiles(files.map(f => f.id === item.id ? { ...f, trashed: true } : f));
+          fetchData();
+          break;
+        case 'trash':
+          if (item.trashed) {
+            // Permanent delete
+            await items.delete(item.id, true);
+            toast({
+              title: 'Deleted permanently',
+              description: `${item.name} has been deleted forever`,
+            });
           } else {
-            setFolders(folders.map(f => f.id === item.id ? { ...f, trashed: true } : f));
+            // Move to trash
+            await items.delete(item.id, false);
+            toast({
+              title: 'Moved to trash',
+              description: `${item.name} moved to trash`,
+            });
           }
+          fetchData();
+          fetchStorage();
+          break;
+        case 'restore':
+          await items.restore(item.id);
           toast({
-            title: 'Moved to trash',
-            description: `${item.name} moved to trash`,
+            title: 'Restored',
+            description: `${item.name} has been restored`,
           });
-        }
-        break;
-      case 'restore':
-        if (item.type) {
-          setFiles(files.map(f => f.id === item.id ? { ...f, trashed: false } : f));
-        } else {
-          setFolders(folders.map(f => f.id === item.id ? { ...f, trashed: false } : f));
-        }
-        toast({
-          title: 'Restored',
-          description: `${item.name} has been restored`,
-        });
-        break;
-      case 'share':
-        setSelectedItem(item);
-        setShowShareModal(true);
-        break;
-      case 'download':
-        toast({
-          title: 'Download started',
-          description: `Downloading ${item.name}`,
-        });
-        break;
-      case 'rename':
-        const newName = prompt('Enter new name:', item.name);
-        if (newName && newName.trim()) {
-          if (item.type) {
-            setFiles(files.map(f => f.id === item.id ? { ...f, name: newName } : f));
-          } else {
-            setFolders(folders.map(f => f.id === item.id ? { ...f, name: newName } : f));
+          fetchData();
+          break;
+        case 'share':
+          setSelectedItem(item);
+          setShowShareModal(true);
+          break;
+        case 'download':
+          try {
+            const response = await files.download(item.id);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', item.name);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            toast({
+              title: 'Download started',
+              description: `Downloading ${item.name}`,
+            });
+          } catch (error) {
+            toast({
+              title: 'Download failed',
+              description: 'Could not download file',
+              variant: 'destructive',
+            });
           }
-          toast({
-            title: 'Renamed',
-            description: `Renamed to ${newName}`,
-          });
-        }
-        break;
-      default:
-        break;
+          break;
+        case 'rename':
+          const newName = prompt('Enter new name:', item.name);
+          if (newName && newName.trim()) {
+            await items.update(item.id, { name: newName });
+            toast({
+              title: 'Renamed',
+              description: `Renamed to ${newName}`,
+            });
+            fetchData();
+          }
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error('Error performing action:', error);
+      toast({
+        title: 'Error',
+        description: 'Action failed',
+        variant: 'destructive',
+      });
     }
   };
 
