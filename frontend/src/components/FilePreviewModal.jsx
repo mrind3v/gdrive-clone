@@ -14,21 +14,36 @@ import { Download, Share2, Star, Trash2, X, ZoomIn, ZoomOut, FileText } from 'lu
 import { formatFileSize, formatDate } from '../mock/mockData';
 import { useToast } from '../hooks/use-toast';
 
-const FilePreviewModal = ({ isOpen, onClose, file, comments = [], onAddComment, onAction }) => {
+const FilePreviewModal = ({ isOpen, onClose, file, onAddComment, onAction, getComments }) => {
   const [newComment, setNewComment] = useState('');
   const [zoom, setZoom] = useState(100);
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  if (!file) return null;
+  useEffect(() => {
+    if (isOpen && file) {
+      loadComments();
+    }
+  }, [isOpen, file]);
 
-  const handleAddComment = () => {
+  const loadComments = async () => {
+    setLoading(true);
+    try {
+      const commentsData = await getComments(file.id);
+      setComments(commentsData);
+    } catch (error) {
+      console.error('Error loading comments:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddComment = async () => {
     if (newComment.trim()) {
-      onAddComment(file.id, newComment);
+      await onAddComment(file.id, newComment);
       setNewComment('');
-      toast({
-        title: 'Comment added',
-        description: 'Your comment has been posted',
-      });
+      await loadComments();
     }
   };
 
