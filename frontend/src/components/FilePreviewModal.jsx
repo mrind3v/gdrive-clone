@@ -116,7 +116,8 @@ const FilePreviewModal = ({ isOpen, onClose, file, onAddComment, onAction, getCo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl h-[90vh] p-0">
+      <DialogContent className="max-w-6xl h-[90vh] p-0" aria-describedby="preview-description">
+        <p id="preview-description" className="sr-only">File preview with details and comments</p>
         <div className="flex h-full">
           {/* Preview Area */}
           <div className="flex-1 flex flex-col">
