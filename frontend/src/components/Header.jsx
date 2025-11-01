@@ -47,6 +47,8 @@ const Header = ({ onSearch, viewMode, onViewModeChange, currentUser, onLogout })
           size="icon"
           onClick={() => onViewModeChange(viewMode === 'grid' ? 'list' : 'grid')}
           className="text-gray-600 hover:bg-gray-100"
+          title={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+          aria-label={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
         >
           {viewMode === 'grid' ? <List className="w-5 h-5" /> : <Grid3x3 className="w-5 h-5" />}
         </Button>
