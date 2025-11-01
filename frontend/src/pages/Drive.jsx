@@ -353,7 +353,7 @@ const Drive = ({ currentUser, onLogout }) => {
             <Route path="/drive" element={<MyDrive {...commonProps} />} />
             <Route path="/recent" element={<Recent {...commonProps} />} />
             <Route path="/starred" element={<Starred {...commonProps} />} />
-            <Route path="/shared" element={<Shared {...commonProps} shares={shares} users={mockUsers} />} />
+            <Route path="/shared" element={<Shared {...commonProps} shares={shares} />} />
             <Route path="/trash" element={<Trash {...commonProps} />} />
           </Routes>
         </main>
