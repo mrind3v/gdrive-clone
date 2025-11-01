@@ -41,7 +41,7 @@ const Drive = ({ currentUser, onLogout }) => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await drive.getItems({
+      const response = await api.drive.getItems({
         view: currentView,
         folderId: currentFolder,
         search: searchQuery,
@@ -62,7 +62,7 @@ const Drive = ({ currentUser, onLogout }) => {
 
   const fetchStorage = async () => {
     try {
-      const response = await storageApi.get();
+      const response = await api.storage.get();
       setStorageInfo(response.data);
     } catch (error) {
       console.error('Error fetching storage:', error);
