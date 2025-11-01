@@ -90,7 +90,7 @@ const Drive = ({ currentUser, onLogout }) => {
 
   const handleCreateFolder = async (name) => {
     try {
-      await folders.create({ name, parentId: currentFolder });
+      await api.folders.create({ name, parentId: currentFolder });
       toast({
         title: 'Folder created',
         description: `"${name}" has been created successfully.`,
@@ -119,7 +119,7 @@ const Drive = ({ currentUser, onLogout }) => {
           );
         }, 200);
 
-        await files.upload(file, currentFolder);
+        await api.files.upload(file, currentFolder);
         
         clearInterval(progressInterval);
         setUploadingFiles(prev => prev.map(f => f.id === fileId ? { ...f, progress: 100 } : f));
