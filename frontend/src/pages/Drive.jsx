@@ -14,10 +14,11 @@ import { useToast } from '../hooks/use-toast';
 import { drive, folders, files, items, shares as sharesApi, comments as commentsApi, storage as storageApi } from '../api/client';
 
 const Drive = ({ currentUser, onLogout }) => {
-  const [files, setFiles] = useState(mockFiles);
-  const [folders, setFolders] = useState(mockFolders);
-  const [shares, setShares] = useState(mockShares);
-  const [comments, setComments] = useState(mockComments);
+  const [files, setFiles] = useState([]);
+  const [folders, setFolders] = useState([]);
+  const [shares, setShares] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [storageInfo, setStorageInfo] = useState({ used: 0, total: 107374182400, breakdown: {} });
   const [currentView, setCurrentView] = useState('drive');
   const [viewMode, setViewMode] = useState('grid');
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,8 +28,46 @@ const Drive = ({ currentUser, onLogout }) => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Fetch data on mount and when view/folder changes
+  useEffect(() => {
+    fetchData();
+    fetchStorage();
+  }, [currentView, currentFolder, searchQuery]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await drive.getItems({
+        view: currentView,
+        folderId: currentFolder,
+        search: searchQuery,
+      });
+      setFiles(response.data.files);
+      setFolders(response.data.folders);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch items',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchStorage = async () => {
+    try {
+      const response = await storageApi.get();
+      setStorageInfo(response.data);
+    } catch (error) {
+      console.error('Error fetching storage:', error);
+    }
+  };
 
   useEffect(() => {
     const path = window.location.pathname;
