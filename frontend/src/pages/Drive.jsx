@@ -390,17 +390,17 @@ const Drive = ({ currentUser, onLogout }) => {
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
         item={selectedItem}
-        sharedUsers={selectedItem ? getSharedUsers(selectedItem.id) : []}
         onShare={handleShare}
         onRevokeAccess={handleRevokeAccess}
+        getSharedUsers={getSharedUsers}
       />
       <FilePreviewModal
         isOpen={showPreviewModal}
         onClose={() => setShowPreviewModal(false)}
         file={selectedItem}
-        comments={selectedItem ? getFileComments(selectedItem.id) : []}
-        onAddComment={handleAddComment}
         onAction={handleItemAction}
+        onAddComment={handleAddComment}
+        getComments={getFileComments}
       />
     </div>
   );
