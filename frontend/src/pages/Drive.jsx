@@ -10,9 +10,8 @@ import Trash from './Trash';
 import NewItemModal from '../components/NewItemModal';
 import ShareModal from '../components/ShareModal';
 import FilePreviewModal from '../components/FilePreviewModal';
-import { mockFiles, mockFolders, mockShares, mockUsers, mockStorageInfo, mockComments } from '../mock/mockData';
 import { useToast } from '../hooks/use-toast';
-import { v4 as uuidv4 } from 'uuid';
+import { drive, folders, files, items, shares as sharesApi, comments as commentsApi, storage as storageApi } from '../api/client';
 
 const Drive = ({ currentUser, onLogout }) => {
   const [files, setFiles] = useState(mockFiles);
