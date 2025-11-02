@@ -442,13 +442,13 @@ My Drive tab
 ![Main Drive View](./images/google-drive-main.png)
 Trash tab
 ![Trash View](./images/trash.png)
-File upload and creatiion window
+File Upload and Creation window
 ![File Upload](./images/upload-and-creation.png)
 File Upload Status
 ![Upload Status](./images/uploading.png)
-File sharing window
+File Sharing window
 ![Sharing](./images/share.png)
-File Preview and activity window
+File Preview and Activity Window
 ![File Preview](./images/preview.png)
 
 ---
