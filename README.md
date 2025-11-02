@@ -437,17 +437,17 @@ User → Select File → Frontend Creates Upload Entry → POST /api/files/uploa
 
 ## Screenshots
 Login Page
-![Login Page](./images/login-page.jpeg)
+![Login Page](./images/google-drive-login.png)
 My Drive tab
-![Main Drive View](./images/my-drive-view.jpeg)
+![Main Drive View](./images/google-drive-main.png)
 Trash tab
 ![Trash view](./images/trash.png)
 File upload and creatiion window
-![File Upload](./images/upload-and-create.png)
+![File Upload](./images/uploading.png)
 File sharing window
-![Sharing](./images/share-modal.png)
-File Preview window
-![File Preview](./images/file-preview.png)
+![Sharing](./images/share.png)
+File Preview and activity window
+![File Preview](./images/preview.png)
 
 ---
 
