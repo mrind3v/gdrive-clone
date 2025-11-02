@@ -15,13 +15,15 @@ const Sidebar = ({ currentView, onViewChange, onNewClick, storageUsed, storageTo
 
   return (
     <div className="w-64 h-full bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-4">
+      <div className="p-4 pt-2">
         <Button
           onClick={onNewClick}
-          className="w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 shadow-sm rounded-full flex items-center justify-start gap-3 h-14 px-6 transition-all hover:shadow-md"
+          className="w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 shadow-sm hover:shadow-md rounded-full flex items-center justify-start gap-3 h-14 px-6 transition-all"
         >
-          <Plus className="w-5 h-5" />
-          <span className="font-medium">New</span>
+          <div className="w-6 h-6 flex items-center justify-center">
+            <Plus className="w-6 h-6" />
+          </div>
+          <span className="font-medium text-sm">New</span>
         </Button>
       </div>
 
@@ -33,13 +35,13 @@ const Sidebar = ({ currentView, onViewChange, onNewClick, storageUsed, storageTo
             <button
               key={item.id}
               onClick={() => onViewChange(item.id)}
-              className={`w-full flex items-center gap-4 px-4 py-3 rounded-full text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-4 px-4 py-2.5 rounded-full text-sm transition-all ${
                 isActive
-                  ? 'bg-blue-50 text-blue-600'
+                  ? 'bg-blue-50 text-blue-600 font-medium'
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-600'}`} />
               <span>{item.label}</span>
             </button>
           );
