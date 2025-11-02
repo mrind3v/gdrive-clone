@@ -442,7 +442,7 @@ My Drive tab
 ![Main Drive View](./images/google-drive-main.png)
 Trash tab
 ![Trash View](./images/trash.png)
-File Upload and Creation window
+File Upload and Folder Creation window
 ![File Upload](./images/upload-and-creation.png)
 File Upload Status
 ![Upload Status](./images/uploading.png)
