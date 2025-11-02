@@ -48,14 +48,14 @@ const Sidebar = ({ currentView, onViewChange, onNewClick, storageUsed, storageTo
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 pt-2 border-t border-gray-200">
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 cursor-pointer">
-            <HardDrive className="w-4 h-4" />
-            <span className="text-sm">Storage</span>
+          <div className="flex items-center gap-2 text-gray-700">
+            <HardDrive className="w-5 h-5 text-gray-600" />
+            <span className="text-sm font-medium">Storage</span>
           </div>
-          <div className="space-y-1">
-            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div className="space-y-1.5">
+            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-blue-600 rounded-full transition-all"
                 style={{ width: `${storagePercentage}%` }}
@@ -66,8 +66,8 @@ const Sidebar = ({ currentView, onViewChange, onNewClick, storageUsed, storageTo
               {((storageTotal / 1024 / 1024 / 1024).toFixed(0))} GB used
             </p>
           </div>
-          <button className="text-xs text-blue-600 hover:underline">
-            Buy storage
+          <button className="text-xs text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors">
+            Get more storage
           </button>
         </div>
       </div>
