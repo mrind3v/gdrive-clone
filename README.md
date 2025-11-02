@@ -2,11 +2,10 @@
 
 A fully functional Google Drive clone built as a reinforcement learning environment for AI agents. This application replicates core Google Drive features including file management, folder hierarchy, sharing, comments, and storage analytics.
 
-![Google Drive Clone](./images/main-drive.png)
 
-## 🚀 Features
+## Features
 
-### ✅ Complete Feature Set
+### Complete Feature Set
 - **User Authentication**: Secure JWT-based authentication with bcrypt password hashing
 - **File Management**: Upload, download, rename, delete, move files with metadata tracking
 - **Folder Hierarchy**: Create nested folders with breadcrumb navigation
@@ -19,7 +18,7 @@ A fully functional Google Drive clone built as a reinforcement learning environm
 - **Trash & Restore**: Soft deletion with restore capability
 - **Responsive UI**: Google Drive-inspired design with grid/list views
 
-### 🎨 UI/UX Highlights
+### UI/UX Highlights
 - Pixel-perfect Google Drive replica with blue accent (#1a73e8)
 - Smooth animations and transitions
 - Toast notifications for user feedback
@@ -27,18 +26,19 @@ A fully functional Google Drive clone built as a reinforcement learning environm
 - Context menus for quick actions
 - Storage usage visualization in sidebar
 
-## 📋 Table of Contents
+## Table of Contents
 - [Architecture](#architecture)
 - [Technology Stack](#technology-stack)
 - [Setup Instructions](#setup-instructions)
 - [Database Schema](#database-schema)
 - [API Documentation](#api-documentation)
 - [Upload Flow](#upload-flow)
-- [Edge Cases Handled](#edge-cases-handled)
 - [Future Enhancements](#future-enhancements)
-- [Testing](#testing)
+- [Security Implementation](#security)
+- [Project Status](#project-status)
+- [Screenshots](#screenshots)
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Architecture
 ```
@@ -89,32 +89,8 @@ backend/
 └── requirements.txt       # Python dependencies
 ```
 
-### Design Decisions
 
-**1. Why FastAPI?**
-- **Async Support**: Native async/await for MongoDB operations
-- **Performance**: One of the fastest Python frameworks
-- **Auto Documentation**: Swagger UI out of the box
-- **Type Safety**: Pydantic models for request/response validation
-
-**2. Why React without Redux?**
-- **Simplicity**: React hooks + local state sufficient for this scope
-- **Performance**: Direct API calls on state changes keep UI responsive
-- **Maintainability**: Fewer abstractions = easier to understand
-
-**3. Why MongoDB?**
-- **Flexible Schema**: Easy to add metadata fields
-- **Nested Documents**: Perfect for folder hierarchies
-- **Fast Queries**: Efficient indexing on owner_id, parent_id
-- **Scalability**: Horizontal scaling for large datasets
-
-**4. Simulated File Storage**
-- **Training Environment**: No need for actual cloud storage (S3, GCS)
-- **Base64 Encoding**: Small files (<1MB) stored in database
-- **Metadata Only**: Large files store metadata with mock content generation
-- **Cost Efficient**: No storage costs for training environment
-
-## 💻 Technology Stack
+## Technology Stack
 
 ### Frontend
 - **React 19.0** - UI library
@@ -134,7 +110,7 @@ backend/
 ### Database
 - **MongoDB 4.5** - NoSQL document database
 
-## 🛠️ Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 - Python 3.11+
@@ -215,7 +191,7 @@ tail -f /var/log/supervisor/frontend.out.log
 2. **Create an account**: Click "Sign up" and create your first user
 3. **Start using**: Upload files, create folders, and explore features!
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Collections Overview
 
@@ -340,7 +316,7 @@ db.comments.createIndex({ "file_id": 1, "created_at": -1 })
 db.activities.createIndex({ "user_id": 1, "timestamp": -1 })
 ```
 
-## 📤 Upload Flow
+## Upload Flow
 
 ### Upload Process
 ```
@@ -359,37 +335,9 @@ User → Select File → Frontend Creates Upload Entry → POST /api/files/uploa
 - Upload state tracked in React component
 - Real-time updates using setInterval
 
-## 🛡️ Edge Cases Handled
 
-### 1. Circular Folder References
-**Problem:** Moving folder into its own subfolder creates infinite loop  
-**Solution:** Check parent chain before allowing move operation
 
-### 2. Duplicate File Names
-**Strategy:** Allow duplicates (like Google Drive)  
-**Implementation:** Database allows multiple files with same name, UI differentiates by ID
-
-### 3. Concurrent Modifications
-**Solution:** Atomic database operations using MongoDB $inc operator
-
-### 4. Orphaned Files After Folder Deletion
-**Strategy:** Cascade to trash (soft delete)  
-**Implementation:** Recursively mark folder and all contents as trashed
-
-### 5. Token Expiration
-**Solution:** Axios interceptor catches 401 errors and redirects to login
-
-### 6. Storage Quota
-**Implementation:** Check quota before upload, atomic increment of storage_used
-
-### 7. Large File Downloads
-**Solution:** Stream response using FastAPI StreamingResponse
-
-### 8. Search Performance
-**Current:** Simple regex search  
-**Future:** MongoDB text indexes for better performance
-
-## 🚀 Future Enhancements
+## Future Enhancements
 
 ### 1. AI-Powered Features
 - Semantic search using embeddings
@@ -451,43 +399,14 @@ User → Select File → Frontend Creates Upload Entry → POST /api/files/uploa
 - CDN integration
 - Lazy loading and virtual scrolling
 
-## 🧪 Testing
 
-### Backend Testing Results
-✅ **All 22 API endpoints tested and working:**
-- Authentication (3 endpoints)
-- Folders (1 endpoint)
-- Files (3 endpoints)
-- Drive Items (1 endpoint)
-- Item Operations (3 endpoints)
-- Sharing (3 endpoints)
-- Comments (2 endpoints)
-- Activities (1 endpoint)
-- Storage (1 endpoint)
-
-### Frontend Testing Results
-✅ **All major features tested end-to-end:**
-- Authentication flow (signup, login, logout)
-- Folder management (create, navigate, rename, star, trash, restore)
-- File operations (upload, download, rename, star, trash)
-- All views (My Drive, Recent, Starred, Shared, Trash)
-- File preview with comments
-- Sharing system with permissions
-- Search functionality
-- UI/UX (responsive, toast notifications, loading states)
-
-### Test Coverage
-- **Backend:** 100% of endpoints tested with real data
-- **Frontend:** 95%+ of user workflows validated
-- **Integration:** End-to-end flows confirmed working
-
-## 🔒 Security
+## Security
 
 **Implemented:**
-- ✅ Password hashing with bcrypt
-- ✅ JWT token authentication
-- ✅ CORS configuration
-- ✅ Authorization checks on all endpoints
+- password hashing with bcrypt
+- JWT token authentication
+- CORS configuration
+- Authorization checks on all endpoints
 
 **Recommended for Production:**
 - HTTPS/TLS encryption
@@ -497,15 +416,12 @@ User → Select File → Frontend Creates Upload Entry → POST /api/files/uploa
 - Security headers
 - Regular security audits
 
-## 📝 License
 
-This project is built as an AI agent training environment and educational purposes.
-
-## 🎯 Project Status
+## Project Status
 
 **Current Version:** 1.0 (MVP Complete)
 
-**Status:** ✅ Fully Functional
+**Status:** Fully Functional
 - All core features implemented
 - Backend tested (22 endpoints)
 - Frontend tested (end-to-end)
@@ -519,7 +435,7 @@ This project is built as an AI agent training environment and educational purpos
 
 ---
 
-**Screenshots**
+## Screenshots
 Login Page
 ![Login Page](./images/login-page.jpeg)
 My Drive tab
