@@ -441,9 +441,11 @@ Login Page
 My Drive tab
 ![Main Drive View](./images/google-drive-main.png)
 Trash tab
-![Trash view](./images/trash.png)
+![Trash View](./images/trash.png)
 File upload and creatiion window
-![File Upload](./images/uploading.png)
+![File Upload](./images/upload-and-creation.png)
+File Upload Status
+![Upload Status](./images/uploading.png)
 File sharing window
 ![Sharing](./images/share.png)
 File Preview and activity window
