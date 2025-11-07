@@ -84,9 +84,23 @@ echo ""
 
 # Create .env file if it doesn't exist
 if [ ! -f .env ]; then
-    echo "Creating .env file from .env.example..."
-    cp .env.example .env
-    echo "✓ .env file created (you can customize it later)"
+    if [ -f .env.example ]; then
+        echo "Creating .env file from .env.example..."
+        cp .env.example .env
+        echo "✓ .env file created"
+    else
+        echo "Creating .env file with defaults..."
+        cat > .env << 'EOF'
+# Google Drive Clone - Environment Variables
+SECRET_KEY=change-this-to-a-strong-random-secret-key-$(date +%s)
+MONGO_URL=mongodb://mongodb:27017
+DB_NAME=google_drive_clone
+REACT_APP_BACKEND_URL=http://localhost:8001
+EOF
+        echo "✓ .env file created with default values"
+    fi
+else
+    echo "✓ .env file already exists"
 fi
 
 # Stop any existing containers
