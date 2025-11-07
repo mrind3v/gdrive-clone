@@ -110,7 +110,41 @@ backend/
 ### Database
 - **MongoDB 4.5** - NoSQL document database
 
-## Setup Instructions
+## 🛠️ Setup Instructions
+
+### Quick Start with Docker (Recommended)
+
+**Prerequisites:** Docker and Docker Compose installed
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd google-drive-clone
+
+# Start all services with one command
+docker-compose up -d
+
+# Access the application
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:8001
+# API Docs: http://localhost:8001/docs
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+**That's it!** The application is now running with MongoDB, backend, and frontend all configured.
+
+📖 **For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)**
+
+---
+
+### Manual Setup (Development)
+
+If you prefer to run without Docker:
 
 ### Prerequisites
 - Python 3.11+
