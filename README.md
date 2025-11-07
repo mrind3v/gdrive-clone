@@ -132,21 +132,18 @@ backend/
 
 ## 🛠️ Setup Instructions
 
-### Quick Start with Docker (Recommended - 2 Commands)
+### Quick Start with Docker (Recommended)
 
-**Step 1: Clone and navigate**
 ```bash
+# Clone the repository
 git clone <your-repository-url>
 cd google-drive-clone
+
+# Start all services
+docker compose up -d
 ```
 
-**Step 2: Run setup script**
-```bash
-chmod +x setup.sh
-sudo ./setup.sh
-```
-
-**That's it!** The application is now running at:
+**Access the application:**
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8001  
 - **API Docs**: http://localhost:8001/docs
@@ -155,6 +152,21 @@ sudo ./setup.sh
 1. Open http://localhost:3000 in your browser
 2. Click "Sign up" to create a new account
 3. Start uploading files and creating folders!
+
+**Common commands:**
+```bash
+# Stop services
+docker compose down
+
+# View logs
+docker compose logs -f
+
+# Restart services
+docker compose restart
+
+# Clean rebuild
+docker compose down -v && docker compose up -d --build
+```
 
 ### Verify Everything is Working
 
