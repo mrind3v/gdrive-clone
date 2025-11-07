@@ -27,16 +27,21 @@ A fully functional Google Drive clone built as a reinforcement learning environm
 - Storage usage visualization in sidebar
 
 ## Table of Contents
+- [Features](#features)
 - [Architecture](#architecture)
 - [Technology Stack](#technology-stack)
-- [Setup Instructions](#setup-instructions)
+- [Setup Instructions](#%EF%B8%8F-setup-instructions)
 - [Database Schema](#database-schema)
-- [API Documentation](#api-documentation)
 - [Upload Flow](#upload-flow)
 - [Future Enhancements](#future-enhancements)
-- [Security Implementation](#security)
+- [Security](#security)
 - [Project Status](#project-status)
 - [Screenshots](#screenshots)
+- [Testing](#-testing)
+- [Docker Testing Guide](#-docker-testing-guide)
+- [Troubleshooting Docker Issues](#-troubleshooting-docker-issues)
+- [Common Docker Commands](#-common-docker-commands)
+- [Additional Documentation](#-additional-documentation)
 
 ## Architecture
 
