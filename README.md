@@ -2,6 +2,21 @@
 
 A fully functional Google Drive clone built as a reinforcement learning environment for AI agents. This application replicates core Google Drive features including file management, folder hierarchy, sharing, comments, and storage analytics.
 
+## 🚀 Quick Start (2 Commands)
+
+```bash
+# 1. Clone and navigate
+git clone <your-repo-url>
+cd google-drive-clone
+
+# 2. Run with Docker
+docker compose up -d
+```
+
+**That's it!** Open http://localhost:3000 in your browser.
+
+> **Note:** First build takes 5-10 minutes. Subsequent starts are instant.
+
 
 ## Features
 
