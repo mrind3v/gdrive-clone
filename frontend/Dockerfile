@@ -23,6 +23,7 @@ ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 
 # Build the application with increased memory
 ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_ENV=production
 RUN yarn build
 
 # Production stage - smaller image
