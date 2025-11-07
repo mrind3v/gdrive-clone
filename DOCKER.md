@@ -5,7 +5,9 @@ This guide will help you run the Google Drive clone application using Docker.
 ## Prerequisites
 
 - Docker (version 20.10 or higher)
-- Docker Compose (version 1.29 or higher)
+- Docker Compose (version 2.0 or higher)
+
+**Note:** The application uses Node 20 for the frontend, which is automatically handled by Docker.
 
 ### Installing Docker
 
