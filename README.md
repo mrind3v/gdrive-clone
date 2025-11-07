@@ -573,4 +573,537 @@ curl http://localhost:8001/api/storage
 - **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions
 - **[contracts.md](./contracts.md)** - API contracts and implementation details
 
+---
+
+## 🐳 Docker Testing Guide
+
+This section provides step-by-step instructions to verify your Docker deployment is working correctly.
+
+### Prerequisites Check
+
+Before running the application, ensure you have:
+- Docker installed (version 20.10+)
+- Docker Compose installed (version 2.0+)
+- At least 10GB free disk space
+- At least 4GB free RAM
+
+```bash
+# Verify Docker installation
+docker --version
+# Expected: Docker version 20.10.x or higher
+
+# Verify Docker Compose installation
+docker compose version
+# Expected: Docker Compose version 2.x.x or higher
+```
+
+### Step 1: Navigate to Project Directory
+
+**IMPORTANT:** All Docker commands must be run from the project root directory (`/app` or wherever you cloned the repository).
+
+```bash
+# Navigate to the project root
+cd /path/to/google-drive-clone
+
+# Verify you're in the correct directory
+ls -la
+# You should see: docker-compose.yml, setup.sh, .env.example, backend/, frontend/
+```
+
+### Step 2: Run the Setup Script
+
+The setup script automates the entire Docker setup process.
+
+```bash
+# Make the script executable (if not already)
+chmod +x setup.sh
+
+# Run the setup script
+sudo ./setup.sh
+```
+
+**What the script does:**
+1. Checks if Docker and Docker Compose are installed
+2. Adds your user to the docker group (if needed)
+3. Creates `.env` file from `.env.example`
+4. Builds Docker images (takes 5-10 minutes first time)
+5. Starts all containers
+6. Verifies services are running
+
+### Step 3: Verify All Containers Are Running
+
+After the setup script completes, verify all containers are up and healthy:
+
+```bash
+docker compose ps
+```
+
+**Expected Output:**
+```
+NAME                       IMAGE                        STATUS                    PORTS
+google-drive-backend       google-drive-clone-backend   Up (healthy)             0.0.0.0:8001->8001/tcp
+google-drive-frontend      google-drive-clone-frontend  Up                       0.0.0.0:3000->3000/tcp
+google-drive-mongodb       mongo:6.0                    Up (healthy)             0.0.0.0:27017->27017/tcp
+```
+
+**Status Indicators:**
+- ✅ `Up (healthy)` - Service is running and health checks passed
+- ✅ `Up` - Service is running (frontend has simpler health check)
+- ❌ `Exit 1` or `Restarting` - Service has issues (see troubleshooting)
+
+### Step 4: Check Container Logs
+
+If any container shows issues, check the logs:
+
+```bash
+# View all logs
+docker compose logs
+
+# View specific service logs
+docker compose logs backend
+docker compose logs frontend
+docker compose logs mongodb
+
+# Follow logs in real-time (Ctrl+C to stop)
+docker compose logs -f backend
+```
+
+**Healthy Backend Log Snippets:**
+```
+INFO:     Started server process
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001
+```
+
+**Healthy Frontend Log Snippets:**
+```
+Accepting connections at http://localhost:3000
+```
+
+### Step 5: Test Backend API
+
+Verify the backend API is responding:
+
+```bash
+# Test root endpoint
+curl http://localhost:8001/api/
+
+# Expected response:
+# {"message":"Hello World"}
+```
+
+```bash
+# Test health endpoint (requires authentication, 401 is expected)
+curl http://localhost:8001/api/storage
+
+# Expected response:
+# {"detail":"Not authenticated"}
+# This is CORRECT - it means the backend is running and authentication is working
+```
+
+### Step 6: Test Frontend Access
+
+Open your web browser and navigate to:
+
+**http://localhost:3000**
+
+**What you should see:**
+- ✅ Google Drive login page loads
+- ✅ Blue Google Drive logo in the center
+- ✅ "Sign in" and "Sign up" options visible
+- ✅ No console errors (press F12 to check browser console)
+
+**Common Issues:**
+- ❌ "This site can't be reached" - Frontend container not running
+- ❌ Blank white page - Check browser console for errors
+- ❌ "Failed to fetch" errors - Backend not accessible
+
+### Step 7: Complete Smoke Test
+
+Perform a full workflow test to verify all components are working together:
+
+#### 7.1 Create New Account
+
+1. Click **"Sign up"** on the login page
+2. Enter test credentials:
+   - Email: `test@example.com`
+   - Name: `Test User`
+   - Password: `Test123!`
+3. Click **"Sign up"**
+4. You should be redirected to the login page
+
+**Expected Result:** ✅ Account created successfully, toast notification appears
+
+#### 7.2 Login
+
+1. Enter the same credentials on login page
+2. Click **"Sign in"**
+
+**Expected Result:** ✅ Redirected to My Drive dashboard
+
+#### 7.3 Create Folder
+
+1. Click the **"+ New"** button (top-left)
+2. Select **"New Folder"**
+3. Enter folder name: `Test Folder`
+4. Click **"Create"**
+
+**Expected Result:** ✅ New folder appears in the grid view
+
+#### 7.4 Upload File
+
+1. Click the **"+ New"** button
+2. Select **"File Upload"**
+3. Choose any small file (image, PDF, text file)
+4. Wait for upload progress bar
+5. Click **"Done"**
+
+**Expected Result:** ✅ File appears in the grid view with correct icon and size
+
+#### 7.5 Navigate Into Folder
+
+1. Double-click on **"Test Folder"**
+
+**Expected Result:** 
+- ✅ Folder opens (empty state message)
+- ✅ Breadcrumb shows: **My Drive > Test Folder**
+
+#### 7.6 Test Search
+
+1. Click the search bar (top center)
+2. Type the name of your uploaded file
+3. Press Enter
+
+**Expected Result:** ✅ Search results show your file
+
+#### 7.7 Test File Operations
+
+**Star a file:**
+1. Right-click on the uploaded file
+2. Select **"Add to starred"**
+3. Navigate to **"Starred"** in sidebar
+
+**Expected Result:** ✅ File appears in Starred view
+
+**Delete a file:**
+1. Right-click on a file
+2. Select **"Move to trash"**
+3. Navigate to **"Trash"** in sidebar
+
+**Expected Result:** ✅ File appears in Trash view
+
+**Restore from trash:**
+1. In Trash view, right-click on the file
+2. Select **"Restore"**
+3. Navigate back to **"My Drive"**
+
+**Expected Result:** ✅ File is back in My Drive
+
+### Step 8: Verify Data Persistence
+
+Test that data persists across container restarts:
+
+```bash
+# Restart all containers
+docker compose restart
+
+# Wait 30 seconds for services to start
+sleep 30
+
+# Check status
+docker compose ps
+```
+
+**Then in browser:**
+1. Refresh http://localhost:3000
+2. Login with the same test account
+3. Verify your folders and files are still there
+
+**Expected Result:** ✅ All data persists (stored in MongoDB volume)
+
+### Step 9: Test Backend-Frontend Integration
+
+Verify the full stack is communicating properly:
+
+```bash
+# Watch backend logs while using the app
+docker compose logs -f backend
+```
+
+**In another terminal/browser:**
+1. Perform actions in the UI (create folder, upload file, etc.)
+2. Watch the backend logs
+
+**Expected Result:** ✅ Backend logs show API requests for each action:
+```
+INFO:     POST /api/folders 201
+INFO:     POST /api/files/upload 201
+INFO:     GET /api/drive-items 200
+```
+
+### Step 10: Resource Check
+
+Verify containers aren't consuming excessive resources:
+
+```bash
+# Check container resource usage
+docker stats --no-stream
+
+# Expected usage:
+# - MongoDB: ~200-300MB RAM
+# - Backend: ~100-200MB RAM
+# - Frontend: ~50-100MB RAM
+```
+
+### ✅ Testing Complete!
+
+If all steps pass, your Docker deployment is fully functional. The application is ready for use.
+
+---
+
+## 🐛 Troubleshooting Docker Issues
+
+### Issue: Containers Not Starting
+
+**Symptom:** `docker compose ps` shows containers with `Exit 1` or `Restarting` status
+
+**Solutions:**
+
+1. **Check logs for errors:**
+   ```bash
+   docker compose logs backend
+   docker compose logs frontend
+   ```
+
+2. **Rebuild containers from scratch:**
+   ```bash
+   docker compose down -v
+   sudo ./setup.sh
+   # When prompted, type 'y' to rebuild from scratch
+   ```
+
+3. **Check port conflicts:**
+   ```bash
+   # Check if ports are already in use
+   sudo lsof -i :3000  # Frontend port
+   sudo lsof -i :8001  # Backend port
+   sudo lsof -i :27017 # MongoDB port
+   
+   # If in use, stop the conflicting service or change ports in docker-compose.yml
+   ```
+
+### Issue: Backend Shows "Connection Refused"
+
+**Symptom:** Frontend loads but shows "Network Error" or "Failed to fetch"
+
+**Solutions:**
+
+1. **Verify backend is running:**
+   ```bash
+   curl http://localhost:8001/api/
+   ```
+
+2. **Check backend logs:**
+   ```bash
+   docker compose logs backend | tail -50
+   ```
+
+3. **Restart backend container:**
+   ```bash
+   docker compose restart backend
+   ```
+
+4. **Verify MongoDB connection:**
+   ```bash
+   docker compose exec backend env | grep MONGO_URL
+   # Should show: MONGO_URL=mongodb://mongodb:27017
+   ```
+
+### Issue: MongoDB Connection Failures
+
+**Symptom:** Backend logs show "ServerSelectionTimeoutError" or "Connection refused"
+
+**Solutions:**
+
+1. **Check MongoDB is running:**
+   ```bash
+   docker compose ps mongodb
+   # Should show "Up (healthy)"
+   ```
+
+2. **Test MongoDB connection:**
+   ```bash
+   docker compose exec mongodb mongosh --eval "db.runCommand('ping')"
+   # Should return: { ok: 1 }
+   ```
+
+3. **Restart MongoDB:**
+   ```bash
+   docker compose restart mongodb
+   # Wait for health check to pass
+   ```
+
+### Issue: Frontend Shows White/Blank Page
+
+**Symptom:** http://localhost:3000 loads but shows nothing
+
+**Solutions:**
+
+1. **Check browser console (F12):**
+   - Look for JavaScript errors
+   - Check Network tab for failed requests
+
+2. **Verify REACT_APP_BACKEND_URL:**
+   ```bash
+   docker compose exec frontend env | grep REACT_APP_BACKEND_URL
+   # Should show: http://localhost:8001
+   ```
+
+3. **Clear browser cache:**
+   - Press Ctrl+Shift+R (hard refresh)
+   - Or clear cache in browser settings
+
+4. **Rebuild frontend:**
+   ```bash
+   docker compose up -d --build frontend
+   ```
+
+### Issue: "Permission Denied" When Running setup.sh
+
+**Symptom:** `bash: ./setup.sh: Permission denied`
+
+**Solutions:**
+
+```bash
+# Make script executable
+chmod +x setup.sh
+
+# Run with sudo
+sudo ./setup.sh
+```
+
+### Issue: Docker Daemon Not Running
+
+**Symptom:** "Cannot connect to the Docker daemon"
+
+**Solutions:**
+
+```bash
+# Start Docker daemon
+sudo systemctl start docker
+
+# Enable Docker to start on boot
+sudo systemctl enable docker
+
+# Check Docker status
+sudo systemctl status docker
+```
+
+### Issue: Low Disk Space
+
+**Symptom:** "No space left on device" errors during build
+
+**Solutions:**
+
+```bash
+# Clean up old Docker images and containers
+docker system prune -a -f
+
+# Remove unused volumes
+docker volume prune -f
+
+# Check disk space
+df -h
+```
+
+### Issue: Slow Container Build
+
+**Symptom:** `docker compose build` takes very long (>15 minutes)
+
+**Solutions:**
+
+1. **Check internet connection** - Docker needs to download images and packages
+
+2. **Use Docker layer caching:**
+   ```bash
+   # Build without --no-cache flag
+   docker compose build
+   ```
+
+3. **Monitor build progress:**
+   ```bash
+   docker compose build --progress=plain
+   ```
+
+### Getting Help
+
+If issues persist after troubleshooting:
+
+1. **Collect logs:**
+   ```bash
+   docker compose logs > docker-logs.txt
+   ```
+
+2. **Check Docker versions:**
+   ```bash
+   docker --version
+   docker compose version
+   ```
+
+3. **Check system resources:**
+   ```bash
+   free -h  # Available RAM
+   df -h    # Available disk space
+   ```
+
+4. **See detailed documentation:**
+   - [DOCKER.md](./DOCKER.md) - Docker setup details
+   - [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - More troubleshooting steps
+
+---
+
+## 🔄 Common Docker Commands
+
+```bash
+# Start all services
+docker compose up -d
+
+# Stop all services
+docker compose down
+
+# Restart all services
+docker compose restart
+
+# View logs (all services)
+docker compose logs -f
+
+# View logs (specific service)
+docker compose logs -f backend
+
+# Check container status
+docker compose ps
+
+# Rebuild containers
+docker compose up -d --build
+
+# Remove all containers and volumes (fresh start)
+docker compose down -v
+
+# Access container shell (for debugging)
+docker compose exec backend bash
+docker compose exec frontend sh
+
+# Check resource usage
+docker stats
+
+# View Docker images
+docker images
+
+# Remove old images
+docker image prune -a
+```
+
+---
+
 **Built for AI Agent Training Environment**
