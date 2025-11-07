@@ -30,7 +30,7 @@ A fully functional Google Drive clone built as a reinforcement learning environm
 - [Features](#features)
 - [Architecture](#architecture)
 - [Technology Stack](#technology-stack)
-- [Setup Instructions](#%EF%B8%8F-setup-instructions)
+- [Setup Instructions](#-setup-instructions)
 - [Database Schema](#database-schema)
 - [Upload Flow](#upload-flow)
 - [Future Enhancements](#future-enhancements)
