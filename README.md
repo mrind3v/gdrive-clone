@@ -645,7 +645,19 @@ sudo ./setup.sh
 
 ### Step 3: Verify All Containers Are Running
 
-After the setup script completes, verify all containers are up and healthy:
+After the setup script completes, verify all containers are up and healthy.
+
+**Option A: Automated Validation (Recommended)**
+
+Run the validation script to check everything automatically:
+
+```bash
+./validate-docker.sh
+```
+
+This script performs 10 automated checks and provides a detailed report.
+
+**Option B: Manual Verification**
 
 ```bash
 docker compose ps
