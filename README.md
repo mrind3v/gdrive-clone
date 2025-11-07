@@ -188,12 +188,13 @@ docker compose logs -f
 ./validate-docker.sh  # Runs 10 automated checks
 ```
 
-### Stopping the Application
+### Stop/Remove
 
 ```bash
+# Stop services (data persists)
 docker compose down
 
-# To remove all data and start fresh
+# Stop and remove all data
 docker compose down -v
 ```
 
