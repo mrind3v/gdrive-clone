@@ -1,4 +1,5 @@
-version: '3.8'
+# Docker Compose configuration for Google Drive Clone
+# No version field needed (deprecated in Docker Compose v2+)
 
 services:
   # MongoDB Database
