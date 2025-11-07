@@ -74,7 +74,7 @@ docker compose up -d --build
 
 ---
 
-### Issue 3: "the attribute `version` is obsolete"
+### Issue 4: "the attribute `version` is obsolete"
 
 **Warning:**
 ```
