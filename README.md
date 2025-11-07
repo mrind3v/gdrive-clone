@@ -112,39 +112,60 @@ backend/
 
 ## 🛠️ Setup Instructions
 
-### Quick Start with Docker (Recommended)
+### Quick Start with Docker (Recommended - 2 Commands)
 
-**Prerequisites:** Docker and Docker Compose installed
-
+**Step 1: Clone and navigate**
 ```bash
-# Clone the repository
-git clone <repository-url>
+git clone <your-repository-url>
 cd google-drive-clone
-
-# Start all services with one command
-docker-compose up -d
-
-# Access the application
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:8001
-# API Docs: http://localhost:8001/docs
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
 ```
 
-**That's it!** The application is now running with MongoDB, backend, and frontend all configured.
+**Step 2: Run setup script**
+```bash
+chmod +x setup.sh
+sudo ./setup.sh
+```
 
-📖 **For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)**
+**That's it!** The application is now running at:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8001  
+- **API Docs**: http://localhost:8001/docs
+
+**First time using the app:**
+1. Open http://localhost:3000 in your browser
+2. Click "Sign up" to create a new account
+3. Start uploading files and creating folders!
+
+### Verify Everything is Working
+
+```bash
+# Check if all containers are running
+docker compose ps
+
+# You should see 3 services: mongodb (healthy), backend (healthy), frontend (Up)
+
+# Check the logs if needed
+docker compose logs -f
+
+# Test backend API
+curl http://localhost:8001/api/
+# Should return: {"message":"Hello World"}
+```
+
+### Stopping the Application
+
+```bash
+docker compose down
+
+# To remove all data and start fresh
+docker compose down -v
+```
 
 ---
 
-### Manual Setup (Development)
+### Manual Setup (Without Docker)
 
-If you prefer to run without Docker:
+If you prefer to run without Docker (for development):
 
 ### Prerequisites
 - Python 3.11+
