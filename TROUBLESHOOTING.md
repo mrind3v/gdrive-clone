@@ -37,7 +37,26 @@ chmod +x setup.sh
 
 ---
 
-### Issue 2: "manifest for mongo:4.5 not found"
+### Issue 2: "The engine 'node' is incompatible with this module"
+
+**Error:**
+```
+error react-router-dom@7.9.5: The engine "node" is incompatible with this module. Expected version ">=20.0.0". Got "18.x.x"
+```
+
+**Solution:**
+This has been fixed! The Dockerfile now uses Node 20 instead of Node 18.
+
+Make sure you have the latest version:
+```bash
+git pull origin main
+docker compose down
+docker compose up -d --build
+```
+
+---
+
+### Issue 3: "manifest for mongo:4.5 not found"
 
 **Error:**
 ```
