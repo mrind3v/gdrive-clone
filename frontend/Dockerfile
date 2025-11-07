@@ -4,13 +4,11 @@ FROM node:20-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Set environment to production for optimal builds
-ENV NODE_ENV=production
-
 # Copy package files first for better layer caching
 COPY package.json yarn.lock ./
 
-# Install dependencies with network timeout and retry
+# Install ALL dependencies (including devDependencies needed for build)
+# Don't set NODE_ENV=production yet, as we need devDependencies for craco
 RUN yarn install --frozen-lockfile --network-timeout 300000 || \
     yarn install --frozen-lockfile --network-timeout 300000
 
