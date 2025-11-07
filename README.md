@@ -170,31 +170,22 @@ docker compose down -v && docker compose up -d --build
 
 ### Verify Everything is Working
 
-**Quick Validation (Automated):**
-```bash
-# Run the validation script to check everything at once
-./validate-docker.sh
-```
-
-The validation script automatically checks:
-- ✅ Docker and Docker Compose installation
-- ✅ All 3 containers running and healthy
-- ✅ Backend API responding
-- ✅ Frontend accessible
-
-**Manual Verification:**
 ```bash
 # Check if all containers are running
 docker compose ps
-
 # You should see 3 services: mongodb (healthy), backend (healthy), frontend (Up)
-
-# Check the logs if needed
-docker compose logs -f
 
 # Test backend API
 curl http://localhost:8001/api/
 # Should return: {"message":"Hello World"}
+
+# View logs if needed
+docker compose logs -f
+```
+
+**Optional: Automated validation script**
+```bash
+./validate-docker.sh  # Runs 10 automated checks
 ```
 
 ### Stopping the Application
