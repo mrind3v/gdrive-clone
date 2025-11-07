@@ -48,6 +48,13 @@ def format_datetime(dt):
         return dt.isoformat() + 'Z'
     return dt
 
+# ============ HEALTH CHECK ROUTE ============
+
+@api_router.get("/")
+async def health_check():
+    """Health check endpoint for Docker"""
+    return {"status": "ok", "message": "Google Drive Clone API is running"}
+
 # ============ AUTHENTICATION ROUTES ============
 
 @api_router.post("/auth/register", response_model=TokenResponse)
