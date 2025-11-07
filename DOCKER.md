@@ -37,9 +37,27 @@ git clone <repository-url>
 cd google-drive-clone
 ```
 
-### 2. Start the Application
+### 2. Fix Docker Permissions (Ubuntu/Linux)
+
+If you get a "permission denied" error, add your user to the docker group:
+
 ```bash
-docker-compose up -d
+# Add user to docker group
+sudo usermod -aG docker $USER
+
+# Log out and log back in, then verify
+groups $USER | grep docker
+```
+
+**Or use the automated setup script:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+### 3. Start the Application
+```bash
+docker compose up -d
 ```
 
 This single command will:
