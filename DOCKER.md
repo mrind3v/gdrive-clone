@@ -39,25 +39,31 @@ git clone <repository-url>
 cd google-drive-clone
 ```
 
-### 2. Fix Docker Permissions (Ubuntu/Linux)
+### 2. Run the Automated Setup Script (Recommended)
 
-If you get a "permission denied" error, add your user to the docker group:
-
-```bash
-# Add user to docker group
-sudo usermod -aG docker $USER
-
-# Log out and log back in, then verify
-groups $USER | grep docker
-```
-
-**Or use the automated setup script:**
+The setup script handles everything for you:
 ```bash
 chmod +x setup.sh
-./setup.sh
+sudo ./setup.sh
 ```
 
-### 3. Start the Application
+**What it does:**
+- ✅ Checks Docker installation
+- ✅ Fixes Docker permissions
+- ✅ Creates `.env` file with correct values
+- ✅ Builds and starts all containers
+- ✅ Verifies services are healthy
+
+### 3. Validate the Deployment
+
+After setup completes, run the validation script:
+```bash
+./validate-docker.sh
+```
+
+This performs 10 automated checks to ensure everything is working correctly.
+
+**Manual start (Alternative):**
 ```bash
 docker compose up -d
 ```
