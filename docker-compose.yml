@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # MongoDB Database
   mongodb:
-    image: mongo:4.5
+    image: mongo:6.0
     container_name: google-drive-mongodb
     restart: unless-stopped
     ports:
@@ -15,7 +15,7 @@ services:
     networks:
       - drive-network
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
